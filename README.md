@@ -15,7 +15,7 @@ For convenience, all service are added to one repository.
 
 **5. Running the Application** – Step-by-step setup and execution instructions
 
-
+**6. JUnit tests** – Test cases for APIs
 
 # Services
 
@@ -214,4 +214,10 @@ cd AccountService
 ```bash
 cd TransactionService
 ./mvnw spring-boot:run
+```
+
+# Tests
+JUnit tests are added for every service
+```bash
+mvn test
 ```
