@@ -1,5 +1,7 @@
 package com.amex.TransactionService.kafka;
 
+import com.amex.TransactionService.exception.ResourceNotFoundException;
+import com.amex.TransactionService.exception.TransactionException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ public class UserDataFetcher {
 
     private final ConcurrentHashMap<String, CompletableFuture<String>> responseMap = new ConcurrentHashMap<>();
 
-    public String fetchUserByAccountId(String accountId) throws Exception {
+    public String fetchUserByAccountId(String accountId) throws TransactionException {
         String replyTopic = "user-data-response";
         String requestPayload = replyTopic + ":" + accountId;
 
@@ -29,7 +31,9 @@ public class UserDataFetcher {
 
         try {
             return responseFuture.get(10, TimeUnit.SECONDS);
-        } finally {
+        } catch (Exception e) {
+            throw new TransactionException(e.getMessage());
+        }finally {
             responseMap.remove(replyTopic);
         }
     }
